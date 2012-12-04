@@ -14,7 +14,16 @@ public:
 
 public slots:
     void StartGame();
-   // void MousePress(QMouseEvent *event);
+    void AddCircles();
+    void Quit();  
+    void mousePress(int x, int y);
+};
+class MyScene : public QGraphicsScene {
+    Q_OBJECT
+public:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+signals:
+    void mousePress(int x, int y);
 };
 
 
