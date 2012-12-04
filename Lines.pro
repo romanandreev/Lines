@@ -4,8 +4,14 @@ QT += testlib
 RESOURCES +=
 
 SOURCES += \
-    source.cpp \
-    main.cpp
+    main.cpp \
+    board.cpp \
+    myscene.cpp \
+    myqtapp.cpp \
+    global_objects.cpp
 
 HEADERS += \
-    source.h
+    myqtapp.h \
+    myscene.h \
+    board.h \
+    global_objects.h
