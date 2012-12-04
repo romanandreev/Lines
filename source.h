@@ -10,11 +10,10 @@ class myQtApp : public QDialog, private Ui::Dialog
 
 public:
     myQtApp(QDialog *parent = 0);
-
+    void AddCircles();
 
 public slots:
-    void StartGame();
-    void AddCircles();
+    void StartGame(); 
     void Quit();  
     void mousePress(int x, int y);
 };

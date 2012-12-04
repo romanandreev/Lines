@@ -1,6 +1,6 @@
 FORMS += \
     form.ui
-
+QT += testlib
 RESOURCES +=
 
 SOURCES += \
