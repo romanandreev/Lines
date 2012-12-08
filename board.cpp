@@ -87,7 +87,7 @@ bool Board::canDelete(int flag) {
             back[x][y] = 1;
         }
     }
-    for (int i = 0; i < 4; i++) {
+   /* for (int i = 0; i < 4; i++) {
         for (int x = 0; x < size; x++) {
             for (int y = 0; y < size; y++) {
                 if (board[x][y] != NULL &&
@@ -101,6 +101,78 @@ bool Board::canDelete(int flag) {
                             back[x + k2 * MX[i]][y + k2 * MY[i]] = 0;
                         }
                     }
+                }
+            }
+        }
+    }*/
+    for (int x = 0; x < size; x++) {
+        for (int y = 0; y < size; y++) {
+            int cl = getCell(x, y);
+            if (cl != 0) {
+                int k = 0;
+                switch ((cl - 1) % 4 + 1) {
+                case 1:
+                    for (;getCell(x - k - 1, y) == cl && getCell(x + k + 1, y) == cl &&
+                          getCell(x, y + k + 1) == cl && getCell(x, y - k - 1) == cl;k++);
+                    if (k >= 1) {
+                        for (int t = 0; t <= k; t++) {
+                            back[x - t][y] = 0;
+                            back[x + t][y] = 0;
+                            back[x][y - t] = 0;
+                            back[x][y + t] = 0;
+                        }
+                    }
+                    break;
+                case 4:
+                    for (;getCell(x - k - 1, y - k - 1) == cl && getCell(x + k + 1, y - k - 1) == cl &&
+                          getCell(x + k + 1, y + k + 1) == cl && getCell(x - k - 1, y + k + 1) == cl;k++);
+                    if (k >= 1) {
+                        for (int t = 0; t <= k; t++) {
+                            back[x - t][y - t] = 0;
+                            back[x + t][y - t] = 0;
+                            back[x - t][y + t] = 0;
+                            back[x + t][y + t] = 0;
+                        }
+                    }
+                    break;
+                case 2:
+                    for (int k = 2; k <= Size; k++) {
+                        bool good = true;
+                        for (int t = 0; t <= k; t++) {
+                            good &= getCell(x + k, y + t) == cl &&
+                                    getCell(x + t, y + k) == cl &&
+                                    getCell(x, y + t) == cl &&
+                                    getCell(x + t, y) == cl;
+                        }
+                        if (good) {
+                            for (int t = 0; t <= k; t++) {
+                                back[x + k][y + t] = 0;
+                                back[x][y + t] = 0;
+                                back[x + t][y + k] = 0;
+                                back[x + t][y] = 0;
+                            }
+                        }
+                    }
+                    break;
+                case 3:
+                    for (int k = 1; k <= Size; k++) {
+                        bool good = true;
+                        for (int t = 0; t <= k; t++) {
+                            good &= getCell(x + t, y + t) == cl &&
+                                    getCell(x + t, y - t) == cl &&
+                                    getCell(x + k + t, y + k - t) == cl &&
+                                    getCell(x + k + t, y - k + t) == cl;
+                        }
+                        if (good) {
+                            for (int t = 0; t <= k; t++) {
+                                back[x + t][y + t] = 0;
+                                back[x + t][y - t] = 0;
+                                back[x + k + t][y + k - t] = 0;
+                                back[x + k + t][y - k + t] = 0;
+                            }
+                        }
+                    }
+                    break;
                 }
             }
         }
@@ -161,7 +233,7 @@ Figure* Board::addCell(int x, int y, int cl) {
     Figure* f = NULL;
     switch ((cl - 1) % 4 + 1) {
         case 1:
-        f = new Circle(this, x, y, cl);
+        f = new Cross(this, x, y, cl, 0);
         break;
         case 2:
         f = new Square(this, x, y, cl);
@@ -170,7 +242,7 @@ Figure* Board::addCell(int x, int y, int cl) {
         f = new Rhombus(this, x, y, cl);
         break;
         case 4:
-        f = new Star(this, x, y, cl);
+        f = new Cross(this, x, y, cl, 1);
         break;
     }
     return board[x][y] = f;

@@ -105,7 +105,7 @@ void myQtApp::StartGame()
     int Size = spinBox->value();
     int W = 400;
     int H = 400;
-    int sh = 4;
+    int sh = 3;
     board = new Board(Size, Colors, W, H, sh);
     scene = new MyScene(W, H, sh, Size);
     scene->setItemIndexMethod(QGraphicsScene::NoIndex);
