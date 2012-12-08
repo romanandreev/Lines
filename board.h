@@ -1,14 +1,16 @@
 #ifndef BOARD_H
 #define BOARD_H
-#include <QObject>
-#include <figure.h>
-#include <QGraphicsItem>
+
+//#include <figure.h>
+//#include <myqtapp.h>
+class myQtApp;
+class Figure;
+#include <QGraphicsObject>
 
 class Board : public QGraphicsObject {
     Q_OBJECT
     public:
-        Board();
-        Board(int Size);
+        Board(int _Size, int _Colors, myQtApp* qtapp);
         int GetSize();
         void select(int x, int y);
         int getselectedx();
@@ -25,15 +27,22 @@ class Board : public QGraphicsObject {
 
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                    QWidget *widget);
-    protected:
-
+        myQtApp* myqtapp;
+        int Colors;
+        int Size;
+        int DX[4];
+        int DY[4];
+        int MX[4];
+        int MY[4];
     private:
         Figure*** board;
         int** was;
         int** back;
         int size;
+        int cnt;
         int selectedx;
         int selectedy;
+
         QColor color[20];
     signals:
         void deleteItem(Figure*);

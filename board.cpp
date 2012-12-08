@@ -1,16 +1,12 @@
 #include "board.h"
-#include "figures.h"
 
-#include "global_objects.h"
-
-Board::Board() {
-    Board(9);
-}
-
-Board::Board(int Size) {
+Board::Board(int _Size = 9, int _Colors = 4, myQtApp* qtapp = NULL) {
+    Size = _Size;
+    Colors = _Colors;
+    myqtapp = qtapp;
     size = Size;
-    dx = (W - sh * 2) / size;
-    dy = (H - sh * 2) / size;
+    cnt = 0;
+
     selectedx = -1;
     selectedy = -1;
     board = new Figure**[size];
@@ -27,13 +23,14 @@ Board::Board(int Size) {
         }
     }
 
-    color[0] = QColor(255, 0, 0);
-    color[1] = QColor(0, 255, 0);
-    color[2] = QColor(0, 0, 255);
-    color[3] = QColor(255, 255, 0);
-    color[4] = QColor(0, 255, 255);
-    color[5] = QColor(255, 0, 255);
-    color[6] = QColor(255, 192, 203);
+    color[1] = QColor(255, 0, 0);
+    color[2] = QColor(0, 255, 0);
+    color[3] = QColor(30, 144, 255);
+    color[4] = QColor(255, 255, 0);
+    color[5] = QColor(0, 255, 255);
+    color[6] = QColor(255, 0, 255);
+    color[7] = QColor(255, 192, 203);
+    color[8] = QColor(190, 39, 143);
 }
 
 int Board::GetSize() {
@@ -51,9 +48,13 @@ void Board::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *
     }
 }
 void Board::select(int x, int y) {
+    if (selectedx >= 0 && selectedy >= 0 && selectedx < Size && selectedy < Size &&
+            board[selectedx][selectedy] != NULL)
+        board[selectedx][selectedy]->select(false);
     selectedx = x;
     selectedy = y;
-    //board[x][y]->select(true);
+    if (x >= 0 && y >= 0 && x < Size && y < Size && board[x][y] != NULL)
+        board[x][y]->select(true);
 }
 
 /*void Board::changeCell(int x, int y, int c) {
@@ -104,7 +105,7 @@ bool Board::canDelete(int flag) {
             }
         }
     }
-    Score += flag * del * (del - 1) / 2;
+    myqtapp->addToScore(flag * del * (del - 1) / 2);
     if (del) {
         QTime dieTime = QTime::currentTime().addMSecs(300);
         while( QTime::currentTime() < dieTime )
@@ -114,7 +115,6 @@ bool Board::canDelete(int flag) {
         for (int y = 0; y < size; y++) {
             if (back[x][y] == 0) {
                 emit deleteItem(board[x][y]);
-                delete board[x][y];
                 board[x][y] = NULL;
             }
         }
@@ -151,13 +151,22 @@ QColor Board::getColor(int k) const {
     return color[k];
 }
 Figure* Board::addCell(int x, int y, int cl) {
-    cl = 1;
-    switch (cl) {
+    Figure* f = NULL;
+    switch ((cl - 1) % 4 + 1) {
         case 1:
-        Figure* c = new Circle(this, x, y);
-        board[x][y] = c;
+        f = new Circle(this, x, y, cl);
+        break;
+        case 2:
+        f = new Square(this, x, y, cl);
+        break;
+        case 3:
+        f = new Rhombus(this, x, y, cl);
+        break;
+        case 4:
+        f = new Star(this, x, y, cl);
+        break;
     }
-    return board[x][y];
+    return board[x][y] = f;
 }
 
 void Board::moveCell(int x1, int y1, int x2, int y2) {

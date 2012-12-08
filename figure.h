@@ -1,16 +1,18 @@
 #ifndef FIGURE_H
 #define FIGURE_H
 #include <QObject>
-#include <cassert>
 #include <QGraphicsItem>
-class Board;
+#include<board.h>
+//class Board;
+
 class Figure : public QGraphicsObject {
     Q_OBJECT
     public:
-    Figure(Board* board, int nx, int ny);
+    Figure(Board* board, int nx, int ny, int tp);
     void moveCell(int nx, int ny);
     QRectF boundingRect() const;
-    virtual int getType() const {return 0;}
+    int getType();
+    void select(bool f);
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                        QWidget *widget){}
 protected:

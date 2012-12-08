@@ -1,8 +1,6 @@
 #include <QApplication>
 #include <QTime>
-
-#include "myqtapp.h"
-
+#include <myqtapp.h>
 
 int main(int argc, char *argv[])
 {

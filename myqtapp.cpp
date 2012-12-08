@@ -1,11 +1,10 @@
 #include "myqtapp.h"
-#include <cassert>
-#include<iostream>
-
-#include "global_objects.h"
-#include "figures.h"
+#include<QTime>
 myQtApp::myQtApp(QDialog *parent) {
     setupUi(this);
+    board = NULL;
+    scene = NULL;
+    locked = false;
     connect( pushButton, SIGNAL( clicked() ), this, SLOT( StartGame() ) );
     connect( pushButton_2, SIGNAL( clicked() ), this, SLOT( Quit() ) );
    // connect( pushButton_3, SIGNAL( clicked() ), this, SLOT( AddCircles() ) );
@@ -17,8 +16,8 @@ void myQtApp::Quit() {
 
 void myQtApp::AddCircles() {
     int free = 0;
-    for (int x = 0; x < Size; x++) {
-        for (int y = 0; y < Size; y++) {
+    for (int x = 0; x < board->Size; x++) {
+        for (int y = 0; y < board->Size; y++) {
             if (!board->getCell(x, y)) {
                 free++;
             }
@@ -26,10 +25,10 @@ void myQtApp::AddCircles() {
     }
     for (int i = 0; i < std::min(free, 3); i++) {
         while (1) {
-            int x = qrand() % board->GetSize();
-            int y = qrand() % board->GetSize();
+            int x = qrand() % board->Size;
+            int y = qrand() % board->Size;
             if (board->getCell(x, y)) continue;
-            Figure* f = board->addCell(x, y, qrand() % Colors + 1);
+            Figure* f = board->addCell(x, y, qrand() % board->Colors + 1);
             scene->addItem(f);
             break;
         }
@@ -43,8 +42,7 @@ void myQtApp::AddCircles() {
 void myQtApp::mousePress(int x, int y) {
     if (locked) return;
     //label_3->setNum(x);
-    x = (x - sh) / dx;
-    y = (y - sh) / dy;
+
     if (x < 0 || x >= board->GetSize() || y < 0 || y >= board->GetSize()) {
         return;
     }
@@ -60,9 +58,10 @@ void myQtApp::mousePress(int x, int y) {
 
             int cx = board->getselectedx();
             int cy = board->getselectedy();
+            board->select(-1, -1);
             while (1) {
-                int nx = cx - DX[board->getBack(cx, cy)];
-                int ny = cy - DY[board->getBack(cx, cy)];
+                int nx = cx - board->DX[board->getBack(cx, cy)];
+                int ny = cy - board->DY[board->getBack(cx, cy)];
                 board->moveCell(cx, cy, nx, ny);
                 graphicsView->viewport()->update();
                 if (nx == x && ny == y) {
@@ -74,7 +73,7 @@ void myQtApp::mousePress(int x, int y) {
                 cx = nx;
                 cy = ny;
             }
-            board->select(-1, -1);
+
             if (!board->canDelete(1)) {
                 AddCircles();
                 board->canDelete(0);
@@ -91,6 +90,9 @@ void myQtApp::deleteItem(Figure* f) {
     scene->removeItem(f);
 }
 
+void myQtApp::addToScore(int x) {
+    Score += x;
+}
 
 void myQtApp::StartGame()
 {
@@ -99,16 +101,18 @@ void myQtApp::StartGame()
     Board* board1 = board;
     MyScene* scene1 = scene;
 
-    Colors = spinBox_2->value();
-    Size = spinBox->value();
-    board = new Board(Size);
-    scene = new MyScene();
+    int Colors = spinBox_2->value();
+    int Size = spinBox->value();
+    board = new Board(Size, Colors, this);
+    scene = new MyScene(400, 400, 4, Size);
+    scene->setItemIndexMethod(QGraphicsScene::NoIndex);
     connect( scene, SIGNAL( mousePress(int, int) ), this, SLOT(  mousePress(int, int) ) );
     connect( board, SIGNAL( deleteItem(Figure*) ), this, SLOT(  deleteItem(Figure*) ) );
-    scene->setSceneRect(0, 0, W, H);
+
     scene->addItem(board);
     graphicsView->setScene(scene);
     graphicsView->adjustSize();
+
     graphicsView->setRenderHint(QPainter::Antialiasing);
     graphicsView->setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
     graphicsView->viewport()->update();
