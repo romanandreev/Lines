@@ -1,7 +1,8 @@
 #ifndef GLOBAL_OBJECTS_H
 #define GLOBAL_OBJECTS_H
 #include <QtGui>
-#include <QtTest>
+//#include <QtTest>
+//#include <QtTest/QTest>
 #include <queue>
 #include <vector>
 #include <algorithm>

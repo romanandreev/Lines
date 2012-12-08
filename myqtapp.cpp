@@ -1,5 +1,9 @@
 #include "myqtapp.h"
+#include <cassert>
+#include<iostream>
+
 #include "global_objects.h"
+#include "figures.h"
 myQtApp::myQtApp(QDialog *parent) {
     setupUi(this);
     connect( pushButton, SIGNAL( clicked() ), this, SLOT( StartGame() ) );
@@ -25,7 +29,8 @@ void myQtApp::AddCircles() {
             int x = qrand() % board->GetSize();
             int y = qrand() % board->GetSize();
             if (board->getCell(x, y)) continue;
-            board->changeCell(x, y, qrand() % Colors + 1);
+            Figure* f = board->addCell(x, y, qrand() % Colors + 1);
+            scene->addItem(f);
             break;
         }
     }
@@ -55,12 +60,10 @@ void myQtApp::mousePress(int x, int y) {
 
             int cx = board->getselectedx();
             int cy = board->getselectedy();
-            int cl = board->getCell(cx, cy);
             while (1) {
                 int nx = cx - DX[board->getBack(cx, cy)];
                 int ny = cy - DY[board->getBack(cx, cy)];
-                board->changeCell(nx, ny, cl);
-                board->changeCell(cx, cy, 0);
+                board->moveCell(cx, cy, nx, ny);
                 graphicsView->viewport()->update();
                 if (nx == x && ny == y) {
                     break;
@@ -73,7 +76,6 @@ void myQtApp::mousePress(int x, int y) {
             }
             board->select(-1, -1);
             if (!board->canDelete(1)) {
-
                 AddCircles();
                 board->canDelete(0);
             }
@@ -85,6 +87,9 @@ void myQtApp::mousePress(int x, int y) {
 }
 
 
+void myQtApp::deleteItem(Figure* f) {
+    scene->removeItem(f);
+}
 
 
 void myQtApp::StartGame()
@@ -99,12 +104,14 @@ void myQtApp::StartGame()
     board = new Board(Size);
     scene = new MyScene();
     connect( scene, SIGNAL( mousePress(int, int) ), this, SLOT(  mousePress(int, int) ) );
+    connect( board, SIGNAL( deleteItem(Figure*) ), this, SLOT(  deleteItem(Figure*) ) );
     scene->setSceneRect(0, 0, W, H);
     scene->addItem(board);
     graphicsView->setScene(scene);
     graphicsView->adjustSize();
     graphicsView->setRenderHint(QPainter::Antialiasing);
     graphicsView->setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
+    graphicsView->viewport()->update();
     AddCircles();
 
     delete board1;
