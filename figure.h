@@ -3,7 +3,6 @@
 #include <QObject>
 #include <QGraphicsItem>
 #include<board.h>
-//class Board;
 
 class Figure : public QGraphicsObject {
     Q_OBJECT

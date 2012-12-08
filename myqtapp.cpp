@@ -103,12 +103,15 @@ void myQtApp::StartGame()
 
     int Colors = spinBox_2->value();
     int Size = spinBox->value();
-    board = new Board(Size, Colors, this);
-    scene = new MyScene(400, 400, 4, Size);
+    int W = 400;
+    int H = 400;
+    int sh = 4;
+    board = new Board(Size, Colors, W, H, sh);
+    scene = new MyScene(W, H, sh, Size);
     scene->setItemIndexMethod(QGraphicsScene::NoIndex);
     connect( scene, SIGNAL( mousePress(int, int) ), this, SLOT(  mousePress(int, int) ) );
     connect( board, SIGNAL( deleteItem(Figure*) ), this, SLOT(  deleteItem(Figure*) ) );
-
+    connect( board, SIGNAL( addToScore(int) ), this, SLOT(  addToScore(int) ) );
     scene->addItem(board);
     graphicsView->setScene(scene);
     graphicsView->adjustSize();

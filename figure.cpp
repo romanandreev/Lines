@@ -13,12 +13,10 @@ int Figure::getType() {
 void Figure::select(bool f) {
     selected = f;
 }
-
 QRectF Figure::boundingRect() const {
-    //return QRect(0, 0, W, H);
-    int sh = myboard->myqtapp->scene->sh;
-    int dx = myboard->myqtapp->scene->dx;
-    int dy = myboard->myqtapp->scene->dy;
+    int sh = myboard->sh;
+    int dx = myboard->dx;
+    int dy = myboard->dy;
     return QRect(sh + dx * x, sh + dy * y, sh + dx * (x + 1), sh + dy * (y + 1));
 }
 void Figure::moveCell(int nx, int ny) {

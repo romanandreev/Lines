@@ -1,12 +1,19 @@
 #include "board.h"
-
-Board::Board(int _Size = 9, int _Colors = 4, myQtApp* qtapp = NULL) {
+#include <figures.h>
+const int Board::DX[4] = {1, -1, 0, 0};
+const int Board::DY[4] = {0, 0, 1, -1};
+const int Board::MX[4] = {1, 0, 1, 1};
+const int Board::MY[4] = {0, 1, 1, -1};
+Board::Board(int _Size, int _Colors, int _W, int _H, int _sh) {
     Size = _Size;
     Colors = _Colors;
-    myqtapp = qtapp;
+    W = _W;
+    H = _H;
+    sh = _sh;
     size = Size;
     cnt = 0;
-
+    dx = (W - sh * 2) / Size;
+    dy = (H - sh * 2) / Size;
     selectedx = -1;
     selectedy = -1;
     board = new Figure**[size];
@@ -105,7 +112,7 @@ bool Board::canDelete(int flag) {
             }
         }
     }
-    myqtapp->addToScore(flag * del * (del - 1) / 2);
+    emit addToScore(flag * del * (del - 1) / 2);
     if (del) {
         QTime dieTime = QTime::currentTime().addMSecs(300);
         while( QTime::currentTime() < dieTime )

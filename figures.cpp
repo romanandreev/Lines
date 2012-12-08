@@ -4,9 +4,9 @@
 Circle::Circle(Board* board, int nx, int ny, int tp) :Figure(board, nx, ny, tp){}
 void Circle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
            QWidget *widget) {
-    int sh = myboard->myqtapp->scene->sh;
-    int dx = myboard->myqtapp->scene->dx;
-    int dy = myboard->myqtapp->scene->dy;
+    int sh = myboard->sh;
+    int dx = myboard->dx;
+    int dy = myboard->dy;
 
     painter->setBrush(myboard->getColor(type));
     painter->drawEllipse(sh + dx * x + sh, sh + dy * y + sh, dx - 2 * sh, dy - 2 * sh);
@@ -19,9 +19,9 @@ void Circle::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 Square::Square(Board* board, int nx, int ny, int tp) :Figure(board, nx, ny, tp){}
 void Square::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
            QWidget *widget) {
-    int sh = myboard->myqtapp->scene->sh;
-    int dx = myboard->myqtapp->scene->dx;
-    int dy = myboard->myqtapp->scene->dy;
+    int sh = myboard->sh;
+    int dx = myboard->dx;
+    int dy = myboard->dy;
     painter->setBrush(myboard->getColor(type));
     painter->drawRect(sh + dx * x + sh, sh + dy * y + sh, dx - 2 * sh, dy - 2 * sh);
     if (selected) {
@@ -33,9 +33,9 @@ void Square::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 Rhombus::Rhombus(Board* board, int nx, int ny, int tp) :Figure(board, nx, ny, tp){}
 void Rhombus::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
            QWidget *widget) {
-    int sh = myboard->myqtapp->scene->sh;
-    int dx = myboard->myqtapp->scene->dx;
-    int dy = myboard->myqtapp->scene->dy;
+    int sh = myboard->sh;
+    int dx = myboard->dx;
+    int dy = myboard->dy;
     painter->setBrush(myboard->getColor(type));
     QPolygon polygon;
     polygon.setPoints(4, sh + dx * x + sh, sh + dy * y + dy / 2, sh + dx * x + dx / 2, sh + dy * y + sh,
@@ -49,9 +49,9 @@ void Rhombus::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 Star::Star(Board* board, int nx, int ny, int tp) :Figure(board, nx, ny, tp){}
 void Star::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
            QWidget *widget) {
-    int sh = myboard->myqtapp->scene->sh;
-    int dx = myboard->myqtapp->scene->dx;
-    int dy = myboard->myqtapp->scene->dy;
+    int sh = myboard->sh;
+    int dx = myboard->dx;
+    int dy = myboard->dy;
     painter->setBrush(myboard->getColor(type));
     QPolygon polygon;
     int N = 10;
