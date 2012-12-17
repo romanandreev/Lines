@@ -1,5 +1,7 @@
 #include "myqtapp.h"
 #include<QTime>
+#include<vector>
+
 myQtApp::myQtApp(QDialog *parent) {
     setupUi(this);
     board = NULL;
@@ -13,20 +15,22 @@ void myQtApp::Quit() {
     exit(0);
 }
 
-void myQtApp::AddCircles() {
-    int free = 0;
+void myQtApp::AddCircles() {   
+    std::vector<std::pair<int, int> > free;
+    //int free = 0;
     for (int x = 0; x < board->Size; ++x) {
         for (int y = 0; y < board->Size; ++y) {
             if (!board->getCell(x, y)) {
-                ++free;
+                free.push_back(std::make_pair(x, y));
             }
         }
     }
-    for (int i = 0; i < std::min(free, 3); ++i) {
+    int nfree = (int)free.size();
+    for (int i = 0; i < std::min(nfree, 3); ++i) {
         while (1) {
-            int x = qrand() % board->Size;
-            int y = qrand() % board->Size;
-            if (board->getCell(x, y)) continue;
+            int id = qrand() % nfree;
+            int x = free[id].first;
+            int y = free[id].second;
             Figure* f = board->addCell(x, y, qrand() % board->Colors + 1);
             scene->addItem(f);
             break;
