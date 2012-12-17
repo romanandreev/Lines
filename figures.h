@@ -3,40 +3,29 @@
 #include <figure.h>
 #include <QPainter>
 
-/*class Circle : public Figure {
-    Q_OBJECT
-    public:
-        Circle(Board* board, int nx, int ny, int tp);
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                   QWidget *widget);
-};*/
 class Square : public Figure {
     Q_OBJECT
     public:
-        Square(Board* board, int nx, int ny, int tp);
+        Square(Board* board, const int nx, const int ny, const int tp);
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                    QWidget *widget);
+        void tryToRemove();
 };
 class Rhombus : public Figure {
     Q_OBJECT
     public:
-        Rhombus(Board* board, int nx, int ny, int tp);
+        Rhombus(Board* board, const int nx, const int ny, const int tp);
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                    QWidget *widget);
+        void tryToRemove();
 };
-/*class Star : public Figure {
-    Q_OBJECT
-    public:
-        Star(Board* board, int nx, int ny, int tp);
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-                   QWidget *widget);
-};*/
 class Cross : public Figure {
     Q_OBJECT
     public:
-        Cross(Board* board, int nx, int ny, int tp, int _xtype);
+        Cross(Board* board, const int nx, const int ny, const int tp, int _xtype);
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                    QWidget *widget);
+        void tryToRemove();
     private:
         int xtype;
 };

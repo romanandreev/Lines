@@ -7,7 +7,6 @@ myQtApp::myQtApp(QDialog *parent) {
     locked = false;
     connect( pushButton, SIGNAL( clicked() ), this, SLOT( StartGame() ) );
     connect( pushButton_2, SIGNAL( clicked() ), this, SLOT( Quit() ) );
-   // connect( pushButton_3, SIGNAL( clicked() ), this, SLOT( AddCircles() ) );
 }
 
 void myQtApp::Quit() {
@@ -16,14 +15,14 @@ void myQtApp::Quit() {
 
 void myQtApp::AddCircles() {
     int free = 0;
-    for (int x = 0; x < board->Size; x++) {
-        for (int y = 0; y < board->Size; y++) {
+    for (int x = 0; x < board->Size; ++x) {
+        for (int y = 0; y < board->Size; ++y) {
             if (!board->getCell(x, y)) {
-                free++;
+                ++free;
             }
         }
     }
-    for (int i = 0; i < std::min(free, 3); i++) {
+    for (int i = 0; i < std::min(free, 3); ++i) {
         while (1) {
             int x = qrand() % board->Size;
             int y = qrand() % board->Size;
@@ -39,11 +38,10 @@ void myQtApp::AddCircles() {
 
 
 
-void myQtApp::mousePress(int x, int y) {
+void myQtApp::mousePress(const int x, const int y) {
     if (locked) return;
-    //label_3->setNum(x);
 
-    if (x < 0 || x >= board->GetSize() || y < 0 || y >= board->GetSize()) {
+    if (x < 0 || x >= board->getSize() || y < 0 || y >= board->getSize()) {
         return;
     }
     if (board->getCell(x, y)) {
@@ -90,7 +88,7 @@ void myQtApp::deleteItem(Figure* f) {
     scene->removeItem(f);
 }
 
-void myQtApp::addToScore(int x) {
+void myQtApp::addToScore(const int x) {
     Score += x;
 }
 

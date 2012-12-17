@@ -9,20 +9,21 @@ class Figure;
 class Board : public QGraphicsObject {
     Q_OBJECT
     public:
-        Board(int _Size, int _Colors, int _W, int _H, int _sh);
-        int GetSize();
-        void select(int x, int y);
-        int getselectedx();
-        int getselectedy();
-        bool canDelete(int flag);
-        int getBack(int x, int y);
-        bool bfs(int x, int y);
-        void changeCell(int x, int y, int c);
-        int getCell(int x, int y);
-        Figure* addCell(int x, int y, int cl);
-        void moveCell(int x1, int y1, int x2, int y2);
+        Board(const int _Size, const int _Colors, const int _W, const int _H, const int _sh);
+        ~Board();
+        int getSize() const;
+        void select(const int x, const int y);
+        int getselectedx() const;
+        int getselectedy() const;
+        bool canDelete(const int flag);
+        int getBack(const int x, const int y) const;
+        bool bfs(const int x, const int y);
+        void changeCell(const int x, const int y, const int c);
+        int getCell(const int x, const int y) const;
+        Figure* addCell(const int x, const int y, const int cl);
+        void moveCell(const int x1, const int y1, const int x2, const int y2);
         QRectF boundingRect() const;
-        QColor getColor(int k) const;
+        QColor getColor(const int k) const;
 
         void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                    QWidget *widget);
@@ -34,10 +35,10 @@ class Board : public QGraphicsObject {
         static const int MX[4];
         static const int MY[4];
         int dx, dy, sh;
+        int** back;
     private:
         Figure*** board;
         int** was;
-        int** back;
         int size;
         int cnt;
         int selectedx;
@@ -45,7 +46,7 @@ class Board : public QGraphicsObject {
 
         QColor color[20];
     signals:
-        void addToScore(int);
+        void addToScore(const int);
         void deleteItem(Figure*);
 };
 

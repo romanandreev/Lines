@@ -8,7 +8,7 @@ class Figure;
 class MyScene : public QGraphicsScene {
     Q_OBJECT
 public:
-    MyScene(int _W, int _H, int _sh, int _Size);
+    MyScene(const int _W, const int _H, const int _sh, const int _Size);
     int W;
     int H;
     int sh;
@@ -17,7 +17,7 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
 signals:
-    void mousePress(int x, int y);
+    void mousePress(const int x, const int y);
 
 
 };

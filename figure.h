@@ -7,13 +7,14 @@
 class Figure : public QGraphicsObject {
     Q_OBJECT
     public:
-    Figure(Board* board, int nx, int ny, int tp);
-    void moveCell(int nx, int ny);
+    Figure(Board* board, const int nx, const int ny, const int tp);
+    void moveCell(const int nx, const int ny);
     QRectF boundingRect() const;
-    int getType();
-    void select(bool f);
+    int getType() const;
+    void select(const bool f);
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                        QWidget *widget){}
+    virtual void tryToRemove(){}
 protected:
     int type;
     int x, y;

@@ -17,8 +17,8 @@ public slots:
     void StartGame();
     void deleteItem(Figure* f);
     void Quit();
-    void addToScore(int);
-    void mousePress(int x, int y);
+    void addToScore(const int);
+    void mousePress(const int x, const int y);
 
 
 private:
