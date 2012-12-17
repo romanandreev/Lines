@@ -14,7 +14,7 @@ public:
     int sh;
     int Size;
     int dx, dy;
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
 signals:
     void mousePress(const int x, const int y);

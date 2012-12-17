@@ -11,6 +11,8 @@ class Board : public QGraphicsObject {
     public:
         Board(const int _Size, const int _Colors, const int _W, const int _H, const int _sh);
         ~Board();
+        Board& operator = (const Board& other);
+        Board(const Board& other);
         int getSize() const;
         void select(const int x, const int y);
         int getselectedx() const;
@@ -22,10 +24,10 @@ class Board : public QGraphicsObject {
         int getCell(const int x, const int y) const;
         Figure* addCell(const int x, const int y, const int cl);
         void moveCell(const int x1, const int y1, const int x2, const int y2);
-        QRectF boundingRect() const;
+        virtual QRectF boundingRect() const;
         QColor getColor(const int k) const;
 
-        void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+        virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
                    QWidget *widget);
         int Colors;
         int Size;
@@ -39,7 +41,6 @@ class Board : public QGraphicsObject {
     private:
         Figure*** board;
         int** was;
-        int size;
         int cnt;
         int selectedx;
         int selectedy;

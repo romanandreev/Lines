@@ -36,7 +36,9 @@ void Square::tryToRemove() {
         }
     }
 }
-
+Figure* Square::Copy() {
+    return new Square(*this);
+}
 Rhombus::Rhombus(Board* board, const int nx, const int ny, const int tp) :Figure(board, nx, ny, tp){}
 void Rhombus::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
            QWidget *widget) {
@@ -77,7 +79,9 @@ void Rhombus::tryToRemove() {
         }
     }
 }
-
+Figure* Rhombus::Copy() {
+    return new Rhombus(*this);
+}
 Cross::Cross(Board* board, const int nx, const int ny, const int tp, const int _xtype) :Figure(board, nx, ny, tp){xtype = _xtype;}
 void Cross::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
            QWidget *widget) {
@@ -124,5 +128,17 @@ void Cross::tryToRemove() {
         }
     }
 }
+Cross::Cross(const Cross& c) :Figure(c){
+    xtype = c.xtype;
+}
+Cross& Cross::operator = (const Cross& c) {
+    Figure::operator=(c);
+    xtype = c.xtype;
+    return *this;
+}
+Figure* Cross::Copy() {
+    return new Cross(*this);
+}
+
 
 

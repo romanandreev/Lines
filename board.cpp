@@ -1,11 +1,11 @@
 #include "board.h"
 #include <figures.h>
-const int  Board::DX[4] = {1, -1, 0, 0};
-const int  Board::DY[4] = {0, 0, 1, -1};
-const int  Board::MX[4] = {1, 0, 1, 1};
-const int  Board::MY[4] = {0, 1, 1, -1};
+const int Board::DX[4] = {1, -1, 0, 0};
+const int Board::DY[4] = {0, 0, 1, -1};
+const int Board::MX[4] = {1, 0, 1, 1};
+const int Board::MY[4] = {0, 1, 1, -1};
 Board::~Board() {
-    for (int i = 0; i < size; ++i) {
+    for (int i = 0; i < Size; ++i) {
         for (int j = 0; j < Size; ++j) {
             delete board[i][j];
         }
@@ -17,27 +17,100 @@ Board::~Board() {
     delete was;
     delete back;
 }
+Board::Board(const Board& other) {
+    Colors = other.Colors;
+    Size = other.Size;
+    W = other.W;
+    H = other.W;
+    dx = other.dx;
+    dy = other.dy;
+    sh = other.sh;
+    cnt = other.cnt;
+    selectedx = other.selectedx;
+    selectedy = other.selectedy;
 
+
+    board = new Figure**[Size];
+    was = new int*[Size];
+    back = new int*[Size];
+    for (int i = 0; i < Size; ++i) {
+        board[i] = new Figure*[Size];
+        was[i] = new int[Size];
+        back[i] = new int[Size];
+        for (int j = 0; j < Size; ++j) {
+            board[i][j] = other.board[i][j] == NULL ? NULL : other.board[i][j]->Copy();
+            was[i][j] = 0;
+            back[i][j] = 0;
+        }
+    }
+}
+
+Board& Board:: operator = (const Board& other) {
+    if (this != &other)
+    {
+        Colors = other.Colors;
+        Size = other.Size;
+        W = other.W;
+        H = other.W;
+        dx = other.dx;
+        dy = other.dy;
+        sh = other.sh;
+        cnt = other.cnt;
+        selectedx = other.selectedx;
+        selectedy = other.selectedy;
+
+
+        Figure*** nboard = new Figure**[Size];
+        int** nwas = new int*[Size];
+        int** nback = new int*[Size];
+        for (int i = 0; i < Size; ++i) {
+            nboard[i] = new Figure*[Size];
+            for (int j = 0; j < Size; ++j) {
+                nboard[i][j] = other.board[i][j] == NULL ? NULL : other.board[i][j]->Copy();
+            }
+            nwas[i] = new int[Size];
+            std::copy(other.was[i], other.was[i] + Size, nwas[i]);
+            nback[i] = new int[Size];
+            std::copy(other.back[i], other.back[i] + Size, nback[i]);
+        }
+
+        for (int i = 0; i < Size; ++i) {
+            for (int j = 0; j < Size; ++j) {
+                delete board[i][j];
+            }
+            delete board[i];
+            delete was[i];
+            delete back[i];
+        }
+        delete board;
+        delete was;
+        delete back;
+
+        was = nwas;
+        back = nback;
+        board = nboard;
+    }
+    return *this;
+}
 Board::Board(const int  _Size, const int _Colors, const int _W, const int _H, const int _sh) {
     Size = _Size;
     Colors = _Colors;
     W = _W;
     H = _H;
     sh = _sh;
-    size = Size;
     cnt = 0;
     dx = (W - sh * 2) / Size;
     dy = (H - sh * 2) / Size;
     selectedx = -1;
     selectedy = -1;
-    board = new Figure**[size];
-    was = new int*[size];
-    back = new int*[size];
-    for (int i = 0; i < size; ++i) {
-        board[i] = new Figure*[size];
-        was[i] = new int[size];
-        back[i] = new int[size];
-        for (int j = 0; j < size; ++j) {
+    board = new Figure**[Size];
+    was = new int*[Size];
+    back = new int*[Size];
+    for (int i = 0; i < Size; ++i) {
+        board[i] = new Figure*[Size];
+        was[i] = new int[Size];
+        back[i] = new int[Size];
+        for (int j = 0; j < Size; ++j) {
             board[i][j] = NULL;
             was[i][j] = 0;
             back[i][j] = 0;
@@ -55,7 +128,7 @@ Board::Board(const int  _Size, const int _Colors, const int _W, const int _H, co
 }
 
 int Board::getSize() const {
-    return size;
+    return Size;
 }
 QRectF Board::boundingRect() const {
     return QRectF(0, 0, W, H);
@@ -63,9 +136,9 @@ QRectF Board::boundingRect() const {
 void Board::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
     painter->setBrush(QColor(0, 0 ,0));
 
-    for (int i = 0; i <= size; ++i) {
-        painter->drawLine(sh, i * dy + sh, dx * size + sh, i * dy + sh);
-        painter->drawLine(i * dx + sh, sh, i * dx + sh, dy * size + sh);
+    for (int i = 0; i <= Size; ++i) {
+        painter->drawLine(sh, i * dy + sh, dx * Size + sh, i * dy + sh);
+        painter->drawLine(i * dx + sh, sh, i * dx + sh, dy * Size + sh);
     }
 }
 void Board::select(const int x, const int y) {
@@ -93,20 +166,20 @@ int Board::getselectedy() const {
 
 bool Board::canDelete(const int flag) {
     int del = 0;
-    for (int x = 0; x < size; ++x) {
-        for (int y = 0; y < size; ++y) {
+    for (int x = 0; x < Size; ++x) {
+        for (int y = 0; y < Size; ++y) {
             back[x][y] = 1;
         }
     }
-    for (int x = 0; x < size; ++x) {
-        for (int y = 0; y < size; ++y) {
+    for (int x = 0; x < Size; ++x) {
+        for (int y = 0; y < Size; ++y) {
             if (getCell(x, y)) {
                 board[x][y]->tryToRemove();
             }
         }
     }
-    for (int x = 0; x < size; ++x) {
-        for (int y = 0; y < size; ++y) {
+    for (int x = 0; x < Size; ++x) {
+        for (int y = 0; y < Size; ++y) {
             if (back[x][y] == 0) {
                 del++;                
             }
@@ -118,8 +191,8 @@ bool Board::canDelete(const int flag) {
         while( QTime::currentTime() < dieTime )
             QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
     }
-    for (int x = 0; x < size; ++x) {
-        for (int y = 0; y < size; ++y) {
+    for (int x = 0; x < Size; ++x) {
+        for (int y = 0; y < Size; ++y) {
             if (back[x][y] == 0) {
                 emit deleteItem(board[x][y]);
                 board[x][y] = NULL;

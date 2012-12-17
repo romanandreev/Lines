@@ -7,6 +7,22 @@ Figure::Figure(Board* board, const int nx, const int ny, const int tp) {
     type = tp;
     selected = false;
 }
+Figure::Figure(const Figure& f) {
+    type = f.type;
+    x = f.x;
+    y = f.y;
+    selected = f.selected;
+    myboard = f.myboard;
+}
+Figure& Figure::operator = (const Figure& f) {
+    type = f.type;
+    x = f.x;
+    y = f.y;
+    selected = f.selected;
+    myboard = f.myboard;
+    return *this;
+}
+
 int Figure::getType() const {
     return type;
 }
@@ -22,4 +38,7 @@ QRectF Figure::boundingRect() const {
 void Figure::moveCell(const int nx, const int ny) {
     x = nx;
     y = ny;
+}
+Figure* Figure::Copy() {
+    return new Figure(*this);
 }
