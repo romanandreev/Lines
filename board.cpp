@@ -17,7 +17,7 @@ Board::~Board() {
     delete was;
     delete back;
 }
-Board::Board(const Board& other) {
+Board::Board(const Board& other) : QGraphicsObject() {
     for (int i = 0; i < 20; ++i) {
         color[i] = other.color[i];
     }
@@ -98,7 +98,7 @@ Board& Board:: operator = (const Board& other) {
     }
     return *this;
 }
-Board::Board(const int  _Size, const int _Colors, const int _W, const int _H, const int _sh) {
+Board::Board(const int  _Size, const int _Colors, const int _W, const int _H, const int _sh) : QGraphicsObject() {
     Size = _Size;
     Colors = _Colors;
     W = _W;
