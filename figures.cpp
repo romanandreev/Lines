@@ -128,9 +128,7 @@ void Cross::tryToRemove() {
         }
     }
 }
-Cross::Cross(const Cross& c) :Figure(c){
-    xtype = c.xtype;
-}
+Cross::Cross(const Cross& c) :Figure(c), xtype(c.xtype) {}
 Cross& Cross::operator = (const Cross& c) {
     Figure::operator=(c);
     xtype = c.xtype;
@@ -139,6 +137,3 @@ Cross& Cross::operator = (const Cross& c) {
 Figure* Cross::Copy() {
     return new Cross(*this);
 }
-
-
-
