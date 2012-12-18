@@ -1,13 +1,13 @@
 #include <figure.h>
 
-Figure::Figure(Board* board, const int nx, const int ny, const int tp) {
+Figure::Figure(Board* board, const int nx, const int ny, const int tp) : QGraphicsObject() {
     myboard = board;
     x = nx;
     y = ny;
     type = tp;
     selected = false;
 }
-Figure::Figure(const Figure& f) {
+Figure::Figure(const Figure& f) : QGraphicsObject() {
     type = f.type;
     x = f.x;
     y = f.y;
