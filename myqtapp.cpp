@@ -16,7 +16,7 @@ void myQtApp::Quit() {
 }
 
 void myQtApp::AddCircles() {   
-    std::vector<std::pair<int, int> > free;
+    std::vector<std::pair<int, int> > free;    
     //int free = 0;
     for (int x = 0; x < board->Size; ++x) {
         for (int y = 0; y < board->Size; ++y) {
@@ -25,12 +25,13 @@ void myQtApp::AddCircles() {
             }
         }
     }
-    int nfree = (int)free.size();
-    for (int i = 0; i < std::min(nfree, 3); ++i) {
+    for (int i = 0; i < std::min((int)free.size(), 3); ++i) {
         while (1) {
-            int id = qrand() % nfree;
+            int id = qrand() % ((int)free.size());
             int x = free[id].first;
             int y = free[id].second;
+            swap(free[id], free[(int)free.size() - 1]);
+            free.pop_back();
             Figure* f = board->addCell(x, y, qrand() % board->Colors + 1);
             scene->addItem(f);
             break;
