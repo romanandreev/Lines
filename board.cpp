@@ -18,6 +18,9 @@ Board::~Board() {
     delete back;
 }
 Board::Board(const Board& other) {
+    for (int i = 0; i < 20; ++i) {
+        color[i] = other.color[i];
+    }
     Colors = other.Colors;
     Size = other.Size;
     W = other.W;
@@ -48,6 +51,9 @@ Board::Board(const Board& other) {
 Board& Board:: operator = (const Board& other) {
     if (this != &other)
     {
+        for (int i = 0; i < 20; ++i) {
+            color[i] = other.color[i];
+        }
         Colors = other.Colors;
         Size = other.Size;
         W = other.W;
